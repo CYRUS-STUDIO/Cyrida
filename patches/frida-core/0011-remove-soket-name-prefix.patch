@@ -1,0 +1,39 @@
+From 8fe3dbbe4c910ea94c713e9b8957d8c4c271bf57 Mon Sep 17 00:00:00 2001
+From: cyrus <linchaolong.dev@gmail.com>
+Date: Wed, 8 Apr 2026 18:32:04 +0800
+Subject: [PATCH 11/11] remove soket name prefix
+
+---
+ src/linux/frida-helper-backend.vala | 2 +-
+ src/linux/frida-helper-process.vala | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/linux/frida-helper-backend.vala b/src/linux/frida-helper-backend.vala
+index 3d402218..4de98ca2 100644
+--- a/src/linux/frida-helper-backend.vala
++++ b/src/linux/frida-helper-backend.vala
+@@ -1252,7 +1252,7 @@ namespace Frida {
+ 		}
+ 
+ 		private static string make_fallback_address () {
+-			return "/frida-" + Uuid.string_random ();
++			return Uuid.string_random ();
+ 		}
+ 
+ 		private Future<RemoteAgent> establish_connection (LoaderLaunch launch, InjectSpec spec, BootstrapResult bres,
+diff --git a/src/linux/frida-helper-process.vala b/src/linux/frida-helper-process.vala
+index 9f41c886..8c60e100 100644
+--- a/src/linux/frida-helper-process.vala
++++ b/src/linux/frida-helper-process.vala
+@@ -321,7 +321,7 @@ namespace Frida {
+ 			TimeoutSource? timeout_source = null;
+ 
+ 			try {
+-				string socket_path = "/frida-" + Uuid.string_random ();
++				string socket_path = Uuid.string_random ();
+ 				string socket_address = "unix:abstract=" + socket_path;
+ 
+ 				service = new SocketService ();
+-- 
+2.34.1
+

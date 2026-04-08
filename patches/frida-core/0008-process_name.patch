@@ -1,0 +1,25 @@
+From 1303afd4d3a4941fbfd3ca104b6cd5e91cb1f946 Mon Sep 17 00:00:00 2001
+From: cyrus <linchaolong.dev@gmail.com>
+Date: Wed, 8 Apr 2026 15:06:25 +0800
+Subject: [PATCH 08/11] process_name
+
+---
+ src/frida-glue.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/src/frida-glue.c b/src/frida-glue.c
+index ee8f0737..ce22841a 100644
+--- a/src/frida-glue.c
++++ b/src/frida-glue.c
+@@ -40,6 +40,8 @@ frida_init_with_runtime (FridaRuntime rt)
+     g_io_module_openssl_register ();
+ #endif
+ 
++    g_set_prgname ("ggbond");
++    
+     if (runtime == FRIDA_RUNTIME_OTHER)
+     {
+       main_context = g_main_context_ref (g_main_context_default ());
+-- 
+2.34.1
+

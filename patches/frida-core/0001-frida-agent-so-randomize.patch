@@ -1,0 +1,61 @@
+From b93d32541945458e49e5d619effe4e7eba81c830 Mon Sep 17 00:00:00 2001
+From: cyrus <linchaolong.dev@gmail.com>
+Date: Wed, 8 Apr 2026 14:32:45 +0800
+Subject: [PATCH 01/11] frida agent so randomize
+
+---
+ src/linux/linux-host-session.vala | 19 ++++++++++++-------
+ 1 file changed, 12 insertions(+), 7 deletions(-)
+
+diff --git a/src/linux/linux-host-session.vala b/src/linux/linux-host-session.vala
+index 55a0fbec..1c1053a5 100644
+--- a/src/linux/linux-host-session.vala
++++ b/src/linux/linux-host-session.vala
+@@ -62,12 +62,16 @@ namespace Frida {
+ 			var blob64 = Frida.Data.Agent.get_frida_agent_64_so_blob ();
+ 			var emulated_arm = Frida.Data.Agent.get_frida_agent_arm_so_blob ();
+ 			var emulated_arm64 = Frida.Data.Agent.get_frida_agent_arm64_so_blob ();
+-			agent = new AgentDescriptor (PathTemplate ("frida-agent-<arch>.so"),
++
++            // 随机前缀
++            var random_prefix = GLib.Uuid.string_random ();
++
++			agent = new AgentDescriptor (PathTemplate (random_prefix + "-<arch>.so"),
+ 				new Bytes.static (blob32.data),
+ 				new Bytes.static (blob64.data),
+ 				new AgentResource[] {
+-					new AgentResource ("frida-agent-arm.so", new Bytes.static (emulated_arm.data), tempdir),
+-					new AgentResource ("frida-agent-arm64.so", new Bytes.static (emulated_arm64.data), tempdir),
++					new AgentResource (random_prefix + "-arm.so", new Bytes.static (emulated_arm.data), tempdir),
++					new AgentResource (random_prefix + "-arm64.so", new Bytes.static (emulated_arm64.data), tempdir),
+ 				},
+ 				AgentMode.INSTANCED,
+ 				tempdir);
+@@ -382,19 +386,20 @@ namespace Frida {
+ 		}
+ 
+ 		protected override string? get_emulated_agent_path (uint pid) throws Error {
+-			unowned string name;
++			unowned string arch_suffix;
+ 			switch (cpu_type_from_pid (pid)) {
+ 				case Gum.CpuType.IA32:
+-					name = "frida-agent-arm.so";
++					arch_suffix = "arm";
+ 					break;
+ 				case Gum.CpuType.AMD64:
+-					name = "frida-agent-arm64.so";
++					arch_suffix = "arm64";
+ 					break;
+ 				default:
+ 					throw new Error.NOT_SUPPORTED ("Emulated realm is not supported on this architecture");
+ 			}
+ 
+-			AgentResource? resource = agent.resources.first_match (r => r.name == name);
++            // 从 agent.resources 动态匹配（不再使用硬编码）
++			AgentResource? resource = agent.resources.first_match (r => r.name.has_suffix ("-" + arch_suffix + ".so"));
+ 			if (resource == null)
+ 				throw new Error.NOT_SUPPORTED ("Unable to handle emulated processes due to build configuration");
+ 
+-- 
+2.34.1
+

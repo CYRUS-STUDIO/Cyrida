@@ -1,0 +1,36 @@
+From 6520e8c7d12f65a2f3dcf64d9ec4e31e6d3f9562 Mon Sep 17 00:00:00 2001
+From: cyrus <linchaolong.dev@gmail.com>
+Date: Wed, 8 Apr 2026 14:57:06 +0800
+Subject: [PATCH 06/11] thread gdbus
+
+---
+ src/obfuscate_agent_symbols.py | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/src/obfuscate_agent_symbols.py b/src/obfuscate_agent_symbols.py
+index a3e48c0f..903770f6 100644
+--- a/src/obfuscate_agent_symbols.py
++++ b/src/obfuscate_agent_symbols.py
+@@ -47,9 +47,17 @@ if __name__ == "__main__":
+     # thread gum_js_loop
+     random_name = "".join(random.sample(random_charset, 11))
+     log_color(f"[*] Patch `gum-js-loop` to `{random_name}`")
+-    os.system(f"sed -b -i s/gum-js-loop/{random_name}/g {input_file}")  # 把 gum-js-loop 替换成随机字符串
++    os.system(f"sed -b -i s/gum-js-loop/{random_name}/g {input_file}") # 把 gum-js-loop 替换成随机字符串
+ 
+     # thread gmain
+     random_name = "".join(random.sample(random_charset, 5))
+     log_color(f"[*] Patch `gmain` to `{random_name}`")
+     os.system(f"sed -b -i s/gmain/{random_name}/g {input_file}")
++
++    # thread gdbus
++    random_name = "".join(random.sample(random_charset, 5))
++    log_color(f"[*] Patch `gdbus` to `{random_name}`")
++    os.system(f"sed -b -i s/gdbus/{random_name}/g {input_file}")
++
++    log_color(f"[*] Patch Finish")
++    
+\ No newline at end of file
+-- 
+2.34.1
+

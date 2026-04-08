@@ -1,0 +1,32 @@
+From ed561f84413682a7133022516b7bdb951431d00a Mon Sep 17 00:00:00 2001
+From: cyrus <linchaolong.dev@gmail.com>
+Date: Wed, 8 Apr 2026 14:46:58 +0800
+Subject: [PATCH 03/11] .rodata frida string
+
+---
+ src/obfuscate_agent_symbols.py | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/src/obfuscate_agent_symbols.py b/src/obfuscate_agent_symbols.py
+index 27488407..44a17d4d 100644
+--- a/src/obfuscate_agent_symbols.py
++++ b/src/obfuscate_agent_symbols.py
+@@ -31,4 +31,15 @@ if __name__ == "__main__":
+         if "FRIDA" in symbol.name:
+             symbol.name = symbol.name.replace("FRIDA", random_name)
+ 
++    all_patch_string = ["FridaScriptEngine", "GLib-GIO", "GDBusProxy", "GumScript"]
++    for section in binary.sections:
++        if section.name != ".rodata":
++            continue
++        for patch_str in all_patch_string:
++            addr_all = section.search_all(patch_str)
++            for addr in addr_all:
++                patch = [ord(n) for n in list(patch_str)[::-1]]
++                log_color(f"[*] Patching section name={section.name} offset={hex(section.file_offset + addr)} orig:{patch_str} new:{''.join(list(patch_str)[::-1])}")
++                binary.patch_address(section.file_offset + addr, patch)
++
+     binary.write(input_file)
+-- 
+2.34.1
+

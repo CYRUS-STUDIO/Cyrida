@@ -1,0 +1,25 @@
+From 62d75bfdc7adf3cf501e106032362425e72fc89b Mon Sep 17 00:00:00 2001
+From: cyrus <linchaolong.dev@gmail.com>
+Date: Wed, 8 Apr 2026 15:06:49 +0800
+Subject: [PATCH] process_name
+
+---
+ gum/gum.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/gum/gum.c b/gum/gum.c
+index 610d1f7d..83ec83db 100644
+--- a/gum/gum.c
++++ b/gum/gum.c
+@@ -302,7 +302,7 @@ gum_init_embedded (void)
+   g_log_set_default_handler (gum_on_log_message, NULL);
+   gum_do_init ();
+ 
+-  g_set_prgname ("frida");
++  g_set_prgname ("ggbond");
+ 
+ #if defined (HAVE_LINUX) && defined (HAVE_GLIBC)
+   gum_libdl_prevent_unload ();
+-- 
+2.34.1
+

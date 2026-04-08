@@ -1,0 +1,26 @@
+From 6230fce6ee9629aa4535b1c0c204b5ac2378add0 Mon Sep 17 00:00:00 2001
+From: cyrus <linchaolong.dev@gmail.com>
+Date: Wed, 8 Apr 2026 14:48:52 +0800
+Subject: [PATCH 04/11] thread gum_js_loop
+
+---
+ src/obfuscate_agent_symbols.py | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/src/obfuscate_agent_symbols.py b/src/obfuscate_agent_symbols.py
+index 44a17d4d..76cca7f0 100644
+--- a/src/obfuscate_agent_symbols.py
++++ b/src/obfuscate_agent_symbols.py
+@@ -42,4 +42,9 @@ if __name__ == "__main__":
+                 log_color(f"[*] Patching section name={section.name} offset={hex(section.file_offset + addr)} orig:{patch_str} new:{''.join(list(patch_str)[::-1])}")
+                 binary.patch_address(section.file_offset + addr, patch)
+ 
++    # thread gum_js_loop
++    random_name = "".join(random.sample(random_charset, 11))
++    log_color(f"[*] Patch `gum-js-loop` to `{random_name}`")
++    os.system(f"sed -b -i s/gum-js-loop/{random_name}/g {input_file}")  # 把 gum-js-loop 替换成随机字符串
++
+     binary.write(input_file)
+-- 
+2.34.1
+

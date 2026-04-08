@@ -1,0 +1,25 @@
+From e2d7b9640f5aad1da9890d7fc1103f0f81ad7fb5 Mon Sep 17 00:00:00 2001
+From: cyrus <linchaolong.dev@gmail.com>
+Date: Wed, 8 Apr 2026 15:13:11 +0800
+Subject: [PATCH 09/11] memfd jit cache
+
+---
+ src/linux/frida-helper-backend.vala | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/linux/frida-helper-backend.vala b/src/linux/frida-helper-backend.vala
+index 1bbe475d..3d402218 100644
+--- a/src/linux/frida-helper-backend.vala
++++ b/src/linux/frida-helper-backend.vala
+@@ -3271,7 +3271,7 @@ namespace Frida {
+ 		}
+ 
+ 		private int memfd_create (string name, uint flags) {
+-			return Linux.syscall (SysCall.memfd_create, name, flags);
++			return Linux.syscall (SysCall.memfd_create, "jit-cache", flags);
+ 		}
+ 	}
+ 
+-- 
+2.34.1
+
